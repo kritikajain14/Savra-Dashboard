@@ -27,24 +27,24 @@ function Dashboard() {
   const fetchData = async () => {
     try {
       setError(null);
-      
+
       // Always fetch overview for total stats
       const overviewData = await getOverview(period);
       setOverview(overviewData);
-      
+
       // Fetch teachers list
       const teachersData = await getAllTeachers();
       setTeachers(teachersData);
-      
+
       // Fetch distribution data
       const distributionData = await getTeacherDistribution(period);
       setTeacherDistribution(distributionData);
-      
+
       // If a teacher is selected, fetch their specific data
       if (selectedTeacher) {
         const teacherSpecificData = await getTeacherData(selectedTeacher);
         setSelectedTeacherData(teacherSpecificData);
-        
+
         // Fetch trends for selected teacher
         const trendsData = await getTrends(selectedTeacher, period);
         setTrends(trendsData);
@@ -54,7 +54,7 @@ function Dashboard() {
         const trendsData = await getTrends(null, period);
         setTrends(trendsData);
       }
-      
+
     } catch (err) {
       setError('Failed to load dashboard data');
       console.error('Error fetching data:', err);
@@ -85,7 +85,7 @@ function Dashboard() {
   // Calculate insights
   const getTopPerformer = () => {
     if (!teacherDistribution.length) return null;
-    return teacherDistribution.reduce((max, teacher) => 
+    return teacherDistribution.reduce((max, teacher) =>
       teacher.total > max.total ? teacher : max
     );
   };
@@ -128,8 +128,8 @@ function Dashboard() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 rounded-full animate-spin mx-auto mb-4" 
-               style={{ borderColor: '#3B262120', borderTopColor: '#3B2621' }} />
+          <div className="w-16 h-16 border-4 rounded-full animate-spin mx-auto mb-4"
+            style={{ borderColor: '#3B262120', borderTopColor: '#3B2621' }} />
           <p style={{ color: '#3B2621' }}>Loading dashboard...</p>
         </div>
       </div>
@@ -154,39 +154,39 @@ function Dashboard() {
   }
 
   // Determine what data to show in cards
-const cardData = selectedTeacher && selectedTeacherData ? {
-  lessons: selectedTeacherData.overview?.lessons || 0,
-  quizzes: selectedTeacherData.overview?.quizzes || 0,
-  assessments: selectedTeacherData.overview?.assessments || 0,
-  totalTeachers: 1
-} : overview;
+  const cardData = selectedTeacher && selectedTeacherData ? {
+    lessons: selectedTeacherData.overview?.lessons || 0,
+    quizzes: selectedTeacherData.overview?.quizzes || 0,
+    assessments: selectedTeacherData.overview?.assessments || 0,
+    totalTeachers: 1
+  } : overview;
 
   const summaryCards = [
-    { 
-      title: 'Total Lessons', 
-      value: cardData?.lessons || 0, 
-      icon: BookOpen, 
+    {
+      title: 'Total Lessons',
+      value: cardData?.lessons || 0,
+      icon: BookOpen,
       color: colors.lessons,
       bgColor: `${colors.lessons}20`
     },
-    { 
-      title: 'Total Quizzes', 
-      value: cardData?.quizzes || 0, 
-      icon: ClipboardList, 
+    {
+      title: 'Total Quizzes',
+      value: cardData?.quizzes || 0,
+      icon: ClipboardList,
       color: colors.quizzes,
       bgColor: `${colors.quizzes}20`
     },
-    { 
-      title: 'Total Assessments', 
-      value: cardData?.assessments || 0, 
-      icon: GraduationCap, 
+    {
+      title: 'Total Assessments',
+      value: cardData?.assessments || 0,
+      icon: GraduationCap,
       color: colors.assessments,
       bgColor: `${colors.assessments}20`
     },
-    { 
-      title: selectedTeacher ? 'Selected Teacher' : 'Active Teachers', 
-      value: cardData?.totalTeachers || 0, 
-      icon: Users, 
+    {
+      title: selectedTeacher ? 'Selected Teacher' : 'Active Teachers',
+      value: cardData?.totalTeachers || 0,
+      icon: Users,
       color: colors.activeTeachers,
       bgColor: `${colors.activeTeachers}20`
     }
@@ -216,32 +216,32 @@ const cardData = selectedTeacher && selectedTeacherData ? {
           </div>
           <p className="text-sm flex items-center gap-2 mt-1" style={{ color: '#3B262180' }}>
             <Calendar className="w-4 h-4" />
-            {new Date().toLocaleDateString('en-US', { 
-              weekday: 'long', 
-              year: 'numeric', 
-              month: 'long', 
-              day: 'numeric' 
+            {new Date().toLocaleDateString('en-US', {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
             })}
           </p>
         </div>
-        
+
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
           <PeriodToggle selected={period} onChange={setPeriod} />
-          
+
           <TeacherFilter
             teachers={teachers}
             selectedTeacher={selectedTeacher}
             onSelect={handleTeacherSelect}
           />
-          
+
           <button
             onClick={handleRefresh}
             disabled={refreshing}
             className="p-2.5 bg-white border rounded-xl hover:shadow-md transition-all"
             style={{ borderColor: '#3B262120' }}
           >
-            <RefreshCw className={`w-5 h-5 ${refreshing ? 'animate-spin' : ''}`} 
-                       style={{ color: '#3B262180' }} />
+            <RefreshCw className={`w-5 h-5 ${refreshing ? 'animate-spin' : ''}`}
+              style={{ color: '#3B262180' }} />
           </button>
         </div>
       </div>
@@ -262,22 +262,22 @@ const cardData = selectedTeacher && selectedTeacherData ? {
                   <p className="text-3xl font-bold" style={{ color: card.color }}>{card.value}</p>
                 </div>
                 <div className="p-3 rounded-xl group-hover:scale-110 transition-transform"
-                     style={{ backgroundColor: card.bgColor }}>
+                  style={{ backgroundColor: card.bgColor }}>
                   <Icon className="w-6 h-6" style={{ color: card.color }} />
                 </div>
               </div>
               <div className="mt-4">
                 <div className="h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: '#3B262110' }}>
-                  <div 
+                  <div
                     className="h-full rounded-full transition-all duration-500"
-                    style={{ 
-                      width: `${Math.min(100, (card.value / 50) * 100)}%`, 
-                      backgroundColor: card.color 
-                    }} 
+                    style={{
+                      width: `${Math.min(100, (card.value / 50) * 100)}%`,
+                      backgroundColor: card.color
+                    }}
                   />
                 </div>
                 <p className="text-xs mt-2" style={{ color: '#3B262180' }}>
-                  {selectedTeacher 
+                  {selectedTeacher
                     ? `Individual teacher stats for ${getSelectedTeacherName()}`
                     : 'All teachers combined'
                   }
@@ -304,8 +304,8 @@ const cardData = selectedTeacher && selectedTeacherData ? {
           <div className="bg-white rounded-2xl border p-4" style={{ borderColor: '#3B262120' }}>
             <p className="text-xs" style={{ color: '#3B262180' }}>Primary Focus</p>
             <p className="text-sm font-semibold mt-1" style={{ color: colors.lessons }}>
-              {selectedTeacherData.lessons > selectedTeacherData.quizzes ? 
-                (selectedTeacherData.lessons > selectedTeacherData.assessments ? 'Lessons' : 'Assessments') : 
+              {selectedTeacherData.lessons > selectedTeacherData.quizzes ?
+                (selectedTeacherData.lessons > selectedTeacherData.assessments ? 'Lessons' : 'Assessments') :
                 (selectedTeacherData.quizzes > selectedTeacherData.assessments ? 'Quizzes' : 'Assessments')}
             </p>
           </div>
@@ -347,18 +347,18 @@ const cardData = selectedTeacher && selectedTeacherData ? {
           </h2>
           <div className="h-75">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart 
-                data={selectedTeacher ? 
-                  [teacherDistribution.find(t => t._id === selectedTeacher)] : 
+              <BarChart
+                data={selectedTeacher ?
+                  [teacherDistribution.find(t => t._id === selectedTeacher)] :
                   teacherDistribution.slice(0, 5)
-                } 
+                }
                 margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
               >
                 <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                <XAxis 
-                  dataKey="teacher_name" 
-                  stroke="#3B262180" 
-                  fontSize={12} 
+                <XAxis
+                  dataKey="teacher_name"
+                  stroke="#3B262180"
+                  fontSize={12}
                 />
                 <YAxis stroke="#3B262180" fontSize={12} />
                 <Tooltip content={<CustomTooltip />} />
@@ -407,10 +407,10 @@ const cardData = selectedTeacher && selectedTeacherData ? {
             </thead>
             <tbody>
               {teacherDistribution.map((teacher, index) => (
-                <tr 
-                  key={index} 
+                <tr
+                  key={index}
                   className="border-b last:border-0 hover:bg-opacity-50 transition-colors"
-                  style={{ 
+                  style={{
                     borderColor: '#3B262110',
                     backgroundColor: selectedTeacher === teacher._id ? '#3B262105' : 'transparent'
                   }}
@@ -418,7 +418,7 @@ const cardData = selectedTeacher && selectedTeacherData ? {
                   <td className="py-4 px-6">
                     <div className="flex items-center gap-2">
                       <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold"
-                           style={{ background: `linear-gradient(135deg, ${colors.lessons}, ${colors.quizzes})` }}>
+                        style={{ background: `linear-gradient(135deg, ${colors.lessons}, ${colors.quizzes})` }}>
                         {teacher.teacher_name?.charAt(0)}
                       </div>
                       <span style={{ color: '#3B2621', fontWeight: selectedTeacher === teacher._id ? 600 : 400 }}>
@@ -448,7 +448,7 @@ const cardData = selectedTeacher && selectedTeacherData ? {
                     <button
                       onClick={() => handleTeacherSelect(teacher._id)}
                       className="px-3 py-1.5 text-xs rounded-lg transition-all hover:shadow-md"
-                      style={{ 
+                      style={{
                         backgroundColor: selectedTeacher === teacher._id ? colors.quizzes : '#3B262110',
                         color: selectedTeacher === teacher._id ? 'white' : '#3B2621'
                       }}
@@ -467,32 +467,27 @@ const cardData = selectedTeacher && selectedTeacherData ? {
       {trends.length > 0 && (
         <div className="group relative">
           <div className="absolute inset-0 rounded-3xl opacity-10 group-hover:opacity-15 transition-opacity"
-               style={{ background: `linear-gradient(135deg, ${colors.lessons}, ${colors.quizzes})` }} />
+            style={{ background: `linear-gradient(135deg, ${colors.lessons}, ${colors.quizzes})` }} />
           <div className="relative bg-white rounded-3xl p-6 border" style={{ borderColor: '#3B262120' }}>
             <div className="flex items-start gap-4">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white text-lg font-bold"
-                   style={{ background: `linear-gradient(135deg, ${colors.lessons}, ${colors.quizzes})` }}>
+                style={{ background: `linear-gradient(135deg, ${colors.lessons}, ${colors.quizzes})` }}>
                 ✨
               </div>
               <div className="flex-1">
                 <p className="text-sm font-medium mb-1" style={{ color: '#3B262180' }}>AI Insight</p>
                 <p style={{ color: '#3B2621' }}>
-                  {/* {selectedTeacher 
-                    ? `${getSelectedTeacherName()} has created ${selectedTeacherData?.total || 0} total activities. `
-                    : `Across all teachers, there are ${overview?.totalTeachers || 0} active teachers with ${overview?.lessons + overview?.quizzes + overview?.assessments} total activities. `
-                  } */}
-                  {selectedTeacher 
-  ? `${getSelectedTeacherName()} has created ${selectedTeacherData?.overview?.total || 0} total activities. `
-  : `Across all teachers, there are ${overview?.totalTeachers || 0} active teachers with ${
-      (overview?.lessons || 0) + 
-      (overview?.quizzes || 0) + 
-      (overview?.assessments || 0)
-    } total activities. `
-}
+                  {selectedTeacher
+                    ? `${getSelectedTeacherName()} has created ${selectedTeacherData?.overview?.total || 0} total activities. `
+                    : `Across all teachers, there are ${overview?.totalTeachers || 0} active teachers with ${(overview?.lessons || 0) +
+                    (overview?.quizzes || 0) +
+                    (overview?.assessments || 0)
+                    } total activities. `
+                  }
                   {selectedTeacher ? (
                     <>
                       They excel in {' '}
-                      {selectedTeacherData?.overview?.lessons > selectedTeacherData?.overview?.quizzes 
+                      {selectedTeacherData?.overview?.lessons > selectedTeacherData?.overview?.quizzes
                         ? (selectedTeacherData?.overview?.lessons > selectedTeacherData?.overview?.assessments ? 'creating lesson plans' : 'making assessments')
                         : (selectedTeacherData?.overview?.quizzes > selectedTeacherData?.overview?.assessments ? 'conducting quizzes' : 'making assessments')
                       }.
